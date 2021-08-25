@@ -6,11 +6,17 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ServerOptions {
 
+  static ServerOptions create(final @NotNull String[] rawArgs) {
+    return new ImplOptions(rawArgs);
+  }
+
   Map<String, String> getRawOptions();
 
-  @Nullable <T> T getOption(final @NotNull String name, final @NotNull Class<T> clazz);
+  @Nullable
+  <T> T getOption(final @NotNull String name, final @NotNull Class<T> clazz);
 
-  @Nullable <T> T getOptionOr(final @NotNull String name, final @NotNull Class<T> clazz,
+  @Nullable
+  <T> T getOptionOr(final @NotNull String name, final @NotNull Class<T> clazz,
       final @Nullable T or);
 
   @NotNull
@@ -23,10 +29,6 @@ public interface ServerOptions {
     }
 
     return option;
-  }
-
-  static ServerOptions create(final @NotNull String[] rawArgs) {
-    return new ImplOptions(rawArgs);
   }
 
 }
