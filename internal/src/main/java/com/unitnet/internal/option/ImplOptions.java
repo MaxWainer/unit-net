@@ -1,4 +1,4 @@
-package com.maxwainer.unitnet.internal.option;
+package com.unitnet.internal.option;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -11,9 +11,18 @@ class ImplOptions implements ServerOptions {
   private final Map<String, String> rawOptions;
 
   ImplOptions(final @NotNull String[] args) {
-    this.rawOptions = Arrays.stream(args)
-        .collect(Collectors.toMap(it -> it.split("\\s++")[0],
-            it -> it.split("\\s++")[1]));
+    this.rawOptions =
+        Arrays.stream(args)
+            .collect(
+                Collectors.toMap(
+                    it -> it.split(" ")[0],
+                    it -> {
+                      final String[] split = it.split(" ");
+
+                      if (split.length != 2) return "null";
+
+                      return split[1];
+                    }));
   }
 
   @Override
@@ -33,11 +42,10 @@ class ImplOptions implements ServerOptions {
   }
 
   @Override
-  public <T> @Nullable T getOptionOr(@NotNull String name, @NotNull Class<T> clazz,
-      @Nullable T or) {
+  public <T> @Nullable T getOptionOr(
+      @NotNull String name, @NotNull Class<T> clazz, @Nullable T or) {
     final T option = getOption(name, clazz);
 
     return option == null ? or : option;
   }
-
 }
